@@ -7,7 +7,7 @@ Triangle::Triangle(std::istream& ins)
     std::cin >> a_ >> b_ >> c_;
 }
 
-size_t Triangle::Num()
+size_t Triangle::VertexesNumber()
 {
     return (size_t)3;
 }

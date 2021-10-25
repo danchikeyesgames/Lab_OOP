@@ -7,7 +7,7 @@ class Octagon : Figure
 {
 public:
     Octagon(std::istream& ins);
-    size_t Num();
+    size_t VertexesNumber();
     double Area();
     void Print(std::ostream& ssd);
 

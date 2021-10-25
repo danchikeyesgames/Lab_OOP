@@ -7,7 +7,7 @@ class Triangle : Figure
 {
 public:
     Triangle(std::istream& ins);
-    size_t Num();
+    size_t VertexesNumber();
     double Area();
     void Print(std::ostream& ssd);
 

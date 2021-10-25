@@ -6,7 +6,7 @@ Hexagon::Hexagon(std::istream& ins)
     std::cin >> e_ >> f_;
 }
 
-size_t Hexagon::Num()
+size_t Hexagon::VertexesNumber()
 {
     return (size_t)6;
 }

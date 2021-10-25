@@ -6,7 +6,7 @@ Octagon::Octagon(std::istream& ins)
     std::cin >> e_ >> f_ >> g_ >> h_;
 }
 
-size_t Octagon::Num()
+size_t Octagon::VertexesNumber()
 {
     return (size_t)8;
 }
