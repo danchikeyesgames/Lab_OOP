@@ -6,6 +6,7 @@
       "Triangle"
     ],
     "containers": [
+    	"TNaryTree"
     ],
     "finished_labs": {
       "lab1": "lab1",
