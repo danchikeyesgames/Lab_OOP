@@ -1,0 +1,59 @@
+#include "TNaryTree.h"
+#include "hexagon.h"
+#include "titerator.h"
+#include "TNaryTree_item.h"
+#include "tallocation_block.h"
+#include <string>
+
+int main()
+{
+    TNaryTree<hexagon> a(4);
+    if (a.Empty()) {
+        std::cout << "The tree is empty !\n";
+    } else {
+        std::cout << "The tree is not empty !\n";
+    }
+    a.Update(std::shared_ptr<hexagon>(new hexagon(Point(1, 4), Point(1, 2), Point(5, 6), Point(2, 8),
+    Point(3, 1), Point(2, 6))), ""); // 1
+    a.Update(std::shared_ptr<hexagon>(new hexagon(Point(2, 5), Point(1, 5), Point(16, 6), Point(3, 6),
+    Point(1, 8), Point(4, 2))), "c"); // 2
+
+    a.Update(std::shared_ptr<hexagon>(new hexagon(Point(3, 5), Point(9, 1), Point(7, 3), Point(1, 8),
+    Point(5, 6), Point(4, 8))), "cb"); // 3
+
+    a.Update(std::shared_ptr<hexagon>(new hexagon(Point(8, 5), Point(1, 5), Point(16, 6), Point(3, 6),
+    Point(1, 8), Point(4, 2))), "cbc"); // 4
+
+
+    for (auto i: a) {
+        std::cout << *i << std::endl;
+    }
+    std::cout << a;
+    std::cout << a.Area("cb") << "\n";
+    TNaryTree<hexagon> b(a);
+    std::cout << b;
+    std::shared_ptr<hexagon> c = a.GetItem("");
+    std::cout << *c;
+    a.RemoveSubTree("cbc");
+    if (a.Empty()) {
+        std::cout << "The tree is empty !\n";
+    } else {
+        std::cout << "The tree is not empty !\n";
+    }
+    std::cout << "Allocation test:\n";
+    TAllocationBlock block(sizeof(int), 10);
+    int* n1;
+    int* n2;
+    int* n3;
+    n1 = (int*)block.allocate();
+    n2 = (int*)block.allocate();
+    n3 = (int*)block.allocate();
+    *n1 = 10; *n2 = 100; *n3 = 1000;
+    std::cout << *n1 << " " << *n2 << " " << *n3 << "\n";
+    if (block.has_free_blocks()) {
+        std::cout << "Free blocks are avaible !\n";
+    } else {
+        std::cout << "Free blocks are not avaible!\n";
+    }
+    return 0;
+}
