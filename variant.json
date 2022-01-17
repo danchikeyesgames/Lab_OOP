@@ -6,7 +6,8 @@
       "Triangle"
     ],
     "containers": [
-    	"TNaryTree"
+    	"TNaryTree",
+    	"TQueue"
     ],
     "reports": [
       "lab1",

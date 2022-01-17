@@ -1,39 +1,39 @@
 #include <iostream>
 #include <memory>
-#include "tqueen.h"
+#include "tqueue.h"
 
 template <class T>
-TQueen<T>::TQueen()
+TQueue<T>::TQueue()
 {
     head = nullptr;
     count = 0;
 }
 
 template <class T>
-void TQueen<T>::Push(const T &item)
+void TQueue<T>::Push(const T &item)
 {
-    TQueenItem<T> *tmp = new TQueenItem<T>(item, head);
+    TQueueItem<T> *tmp = new TQueueItem<T>(item, head);
     head = tmp;
     ++count;
 }
 
 template <class T>
-bool TQueen<T>::IsEmpty() const
+bool TQueue<T>::IsEmpty() const
 {
     return !count;
 }
 
 template <class T>
-uint32_t TQueen<T>::GetSize() const
+uint32_t TQueue<T>::GetSize() const
 {
     return count;
 }
 
 template <class T>
-void TQueen<T>::Pop()
+void TQueue<T>::Pop()
 {
     if(head) {
-        TQueenItem<T> *tmp = &head->GetNext();
+        TQueueItem<T> *tmp = &head->GetNext();
         delete head;
         head = tmp;
         --count;
@@ -41,19 +41,19 @@ void TQueen<T>::Pop()
 }
 
 template <class T>
-T &TQueen<T>::Top()
+T &TQueue<T>::Top()
 {
     return head->Pop();
 }
 
 template <class T>
-TQueen<T>::~TQueen()
+TQueue<T>::~TQueue()
 {
-    for(TQueenItem<T> *tmp = head, *tmp2; tmp; tmp = tmp2) {
+    for(TQueueItem<T> *tmp = head, *tmp2; tmp; tmp = tmp2) {
         tmp2 = &tmp->GetNext();
         delete tmp;
     }
 }
 
 template class
-TQueen<void *>;
+TQueue<void *>;

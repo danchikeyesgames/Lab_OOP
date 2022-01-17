@@ -2,7 +2,7 @@
 #define TALLOCATION_BLOCK_H
 
 #include <cstdlib>
-#include "tqueen.h"
+#include "tqueue.h"
 
 class TAllocationBlock
 {
@@ -17,7 +17,7 @@ private:
     size_t _size;
     size_t _count;
     char* _used_blocks;
-    TQueen<void*> _free_blocks;
+    TQueue<void*> _free_blocks;
     size_t _free_count;
 };
 
