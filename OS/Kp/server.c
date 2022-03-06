@@ -16,7 +16,9 @@ int main(int argc, char* argv[]) {
     char    buffer[PIPE_BUF], command[PIPE_BUF], name[PIPE_BUF], other[PIPE_BUF], new_msg[PIPE_BUF];
     char    namefile[PIPE_BUF], namepid[PIPE_BUF], Nameof[PIPE_BUF], Namekyda[PIPE_BUF], messegersd[PIPE_BUF];
     char    namechat[PIPE_BUF], tmpchat[PIPE_BUF], othername[PIPE_BUF], argv1[PIPE_BUF], argv2[PIPE_BUF];
+    char    __tmp[PIPE_BUF];
     int     indicator = 0;
+    FILE*   corrected;
     char*   h[PIPE_BUF];
     vector_int* __fd_write = NULL;
 
@@ -89,27 +91,52 @@ int main(int argc, char* argv[]) {
                 printf("tyt1\n");
                 SplitString(argv1, argv2, tmpchat);
                 printf("%s\n", argv2);
-                if (indicator >= __fd_write->size)
-                    Resize_int(__fd_write, __fd_write->size * 2);
-                
-                h[indicator] = (char *) malloc(sizeof(char) * PIPE_BUF);
-                memcpy(h[indicator], argv1, strlen(argv1) + 1);
-                __fd_write->data[indicator] = ConnectPipe(argv1, O_WRONLY);
-                indicator++;
-                memset(tmpchat, '\0', PIPE_BUF);
-                memcpy(tmpchat, argv2, strlen(argv2) + 1);
+                if (indicator == 0) {
+                    memcpy(Nameof, argv1, strlen(argv1) + 1);
+                }
+                if ((corrected = fopen(argv1, "rw")) != NULL) {
+                    if (indicator >= __fd_write->size)
+                        Resize_int(__fd_write, __fd_write->size * 2);
+                    
+                    h[indicator] = (char *) malloc(sizeof(char) * PIPE_BUF);
+                    memcpy(h[indicator], argv1, strlen(argv1) + 1);
+                    __fd_write->data[indicator] = ConnectPipe(argv1, O_WRONLY);
+                    indicator++;
+                    memset(tmpchat, '\0', PIPE_BUF);
+                    memcpy(tmpchat, argv2, strlen(argv2) + 1);
+                    fclose(corrected);
+                } else {
+                    fd_tmp = ConnectPipe(Nameof, O_WRONLY);
+                    printf("Not found\n");
+                    memcpy(__tmp, "Server: Not found ", strlen("Server: Not found ") + 1);
+                    strncat(__tmp, argv1, strlen(argv1) + 1);
+                    write(fd_tmp, __tmp, PIPE_BUF);
+                    memset(tmpchat, '\0', PIPE_BUF);
+                    memcpy(tmpchat, argv2, strlen(argv2) + 1);
+                    close(fd_tmp);
+                }
             }
             printf("tyt2\n");
             printf("is %s -- string\n", tmpchat);
-            if (indicator >= __fd_write->size)
-                    Resize_int(__fd_write, __fd_write->size * 2);
-            h[indicator] = (char *) malloc(sizeof(char) * PIPE_BUF);
-                memcpy(h[indicator], argv1, strlen(argv1) + 1);
-            __fd_write->data[indicator] = ConnectPipe(tmpchat, O_WRONLY);
-            indicator++;
-            printf("tyt\n");
-            for (int i = 0; i < indicator; i++)
-                printf("%d ", __fd_write->data[i]);
+            if ((corrected = fopen(argv1, "rw")) != NULL) {
+                if (indicator >= __fd_write->size)
+                        Resize_int(__fd_write, __fd_write->size * 2);
+                h[indicator] = (char *) malloc(sizeof(char) * PIPE_BUF);
+                    memcpy(h[indicator], argv1, strlen(argv1) + 1);
+                __fd_write->data[indicator] = ConnectPipe(tmpchat, O_WRONLY);
+                indicator++;
+                printf("tyt\n");
+                for (int i = 0; i < indicator; i++)
+                    printf("%d ", __fd_write->data[i]);
+            } else {
+                fd_tmp = ConnectPipe(Nameof, O_WRONLY);
+                printf("Not found\n");
+                memcpy(__tmp, "Server: Not found ", strlen("Server: Not found ") + 1);
+                strncat(__tmp, tmpchat, strlen(tmpchat) + 1);
+                write(fd_tmp, __tmp, PIPE_BUF);
+                close(fd_tmp);
+            }
+            memset(Nameof, '\0', PIPE_BUF);
         }
 
         while (1) {
@@ -167,6 +194,7 @@ int main(int argc, char* argv[]) {
                         printf("Not found\n");
                         write(fd_tmp, "Server: Not found\n", PIPE_BUF);
                         close(fd_tmp);
+                        memset(Nameof, '\0', PIPE_BUF);
                     }
                 } else {
                     if (!strncmp(argv[1], Namekyda, strlen(Namekyda) + 1)) {
@@ -193,6 +221,20 @@ int main(int argc, char* argv[]) {
                     } else if (child) {
                         printf("--->\n");
                         write(fd_give, buffer, PIPE_BUF);
+                    } else {
+                        if (CorrectWord(other)) {
+                            SplitString(Nameof, messegersd, other);
+                            printf("--> %s <--\n", Nameof);
+                        } else {
+                            printf("No Message!\n");
+                            continue;
+                        }
+                        printf("Not found %s\n", Nameof);
+                        fd_tmp = ConnectPipe(Nameof, O_WRONLY);
+                        printf("Not found\n");
+                        write(fd_tmp, "Server: Not found\n", PIPE_BUF);
+                        close(fd_tmp);
+                        memset(Nameof, '\0', PIPE_BUF);
                     }
                 }
             } else if (!strncmp("/create", command, 5)) {
