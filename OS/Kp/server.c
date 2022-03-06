@@ -118,11 +118,11 @@ int main(int argc, char* argv[]) {
             }
             printf("tyt2\n");
             printf("is %s -- string\n", tmpchat);
-            if ((corrected = fopen(argv1, "rw")) != NULL) {
+            if ((corrected = fopen(tmpchat, "rw")) != NULL) {
                 if (indicator >= __fd_write->size)
                         Resize_int(__fd_write, __fd_write->size * 2);
                 h[indicator] = (char *) malloc(sizeof(char) * PIPE_BUF);
-                    memcpy(h[indicator], argv1, strlen(argv1) + 1);
+                    memcpy(h[indicator], tmpchat, strlen(tmpchat) + 1);
                 __fd_write->data[indicator] = ConnectPipe(tmpchat, O_WRONLY);
                 indicator++;
                 printf("tyt\n");
